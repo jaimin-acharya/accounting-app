@@ -30,9 +30,10 @@ export default function Page() {
     setError(null)
 
     // Prefer a configured site URL (for production emails) and fall back to the
-    // current origin when running locally.
-    const baseUrl =
+    // current origin when running locally. Remove trailing slash if present.
+    const baseUrl = (
       process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+    ).replace(/\/$/, '')
 
     if (password !== repeatPassword) {
       setError('Passwords do not match')
