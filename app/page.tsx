@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { StatsCards } from '@/components/dashboard/stats-cards'
 import { AddEntryForm } from '@/components/forms/add-entry-form'
 import { EntriesTable } from '@/components/tables/entries-table'
-import { Menu, LogOut, Home } from 'lucide-react'
+import { Menu, LogOut, Calculator } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 export default function DashboardPage() {
@@ -15,6 +15,7 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [dbError, setDbError] = useState(false)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
 
   const supabase = createClient()
 
@@ -28,6 +29,8 @@ export default function DashboardPage() {
         if (!session) {
           redirect('/auth/login')
         }
+
+        setUserEmail(session.user?.email ?? null)
 
         // Check if database is ready
         const { error } = await supabase
@@ -105,19 +108,28 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-2 rounded-lg">
-                <Home className="h-6 w-6 text-white" />
+              <div className="bg-gradient-to-br from-primary to-primary/90 p-2 rounded-lg">
+                <Calculator className="h-6 w-6 text-white" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-slate-900">
-                  Construction Manager
+                  Account & Tax Manager
                 </h1>
-                <p className="text-sm text-slate-600">Account & Project Dashboard</p>
+                {userEmail && (
+                  <p className="text-xs text-slate-500 md:hidden">
+                    Signed in as <span className="font-medium">{userEmail}</span>
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-4">
+              {userEmail && (
+                <span className="text-sm text-slate-600 truncate max-w-xs">
+                  {userEmail}
+                </span>
+              )}
               <Button
                 variant="outline"
                 size="sm"
@@ -136,18 +148,28 @@ export default function DashboardPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-9 w-9 p-0 text-slate-700"
+                    className="h-4 w-4 p-0 text-slate-700"
                   >
-                    <Menu className="h-5 w-5" />
+                    <Menu className="h-4 w-4" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent>
-                  <div className="mt-6">
+                  <div className="mt-4 space-y-4">
+                    {userEmail && (
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                        <p className="text-xs font-medium text-slate-500">
+                          Signed in as
+                        </p>
+                        <p className="text-sm font-semibold text-slate-800 break-all">
+                          {userEmail}
+                        </p>
+                      </div>
+                    )}
                     <Button
                       onClick={handleLogout}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white"
+                      className="align-center bg-red-600 hover:bg-red-700 text-white"
                     >
-                      <LogOut className="h-4 w-4 mr-2" />
+                      <LogOut className="h-2 w-2 mr-2" />
                       Logout
                     </Button>
                   </div>

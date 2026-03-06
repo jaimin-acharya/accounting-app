@@ -44,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased bg-slate-50">
+      <body className="min-h-svh overflow-x-hidden font-sans antialiased bg-slate-50">
         <EntriesProvider>
           {children}
         </EntriesProvider>

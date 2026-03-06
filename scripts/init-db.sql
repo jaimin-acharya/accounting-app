@@ -9,7 +9,12 @@ CREATE TABLE IF NOT EXISTS entries (
   project_name TEXT NOT NULL,
   category TEXT NOT NULL CHECK (category IN ('vendor', 'labour', 'material', 'labour_attendance', 'material_stock', 'other')),
   party_name TEXT NOT NULL,
+  party_gstin TEXT,
+  party_pan TEXT,
   quantity NUMERIC,
+  subtotal_amount NUMERIC,
+  tax_rate NUMERIC,
+  tax_amount NUMERIC,
   amount NUMERIC NOT NULL,
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
@@ -45,3 +50,11 @@ CREATE POLICY "Users can update their own entries" ON entries
 CREATE POLICY "Users can delete their own entries" ON entries
   FOR DELETE
   USING (auth.uid() = user_id);
+
+-- If you created the table before these columns existed, run this block too.
+ALTER TABLE entries
+  ADD COLUMN IF NOT EXISTS party_gstin TEXT,
+  ADD COLUMN IF NOT EXISTS party_pan TEXT,
+  ADD COLUMN IF NOT EXISTS subtotal_amount NUMERIC,
+  ADD COLUMN IF NOT EXISTS tax_rate NUMERIC,
+  ADD COLUMN IF NOT EXISTS tax_amount NUMERIC;

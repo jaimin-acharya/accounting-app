@@ -7,7 +7,12 @@ export interface Entry {
   project_name: string
   category: EntryCategory
   party_name: string
+  party_gstin?: string | null
+  party_pan?: string | null
   quantity?: number | null
+  subtotal_amount?: number | null
+  tax_rate?: number | null
+  tax_amount?: number | null
   amount: number
   notes?: string | null
   created_at: string
@@ -19,7 +24,12 @@ export interface CreateEntryInput {
   project_name: string
   category: EntryCategory
   party_name: string
+  party_gstin?: string | null
+  party_pan?: string | null
   quantity?: number | null
+  subtotal_amount?: number | null
+  tax_rate?: number | null
+  tax_amount?: number | null
   amount: number
   notes?: string | null
 }
